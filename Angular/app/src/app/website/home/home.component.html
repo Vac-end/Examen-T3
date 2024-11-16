@@ -1,0 +1,156 @@
+<div class="container mx-auto p-4">
+  <h1 class="text-3xl font-bold mb-4">Gestión de Reclamos</h1>
+  
+  <!-- Botón Crear Reclamo -->
+  <button (click)="OpenModalButton()" class="bg-green-700 hover:bg-green-900 p-4 text-white cursor-pointer rounded-lg mb-4">CREAR RECLAMO</button>
+
+  <!-- Modal para el formulario de creación de reclamo -->
+  <div *ngIf="openmodal" class="fixed inset-0 z-50 overflow-y-auto">
+    <div class="relative flex items-center justify-center min-h-screen p-4">
+      <div class="relative bg-white rounded-lg shadow max-w-2xl w-full">
+        <div class="flex justify-end w-full">
+          <div class="bg-red-700 hover:bg-red-900 p-4 text-white cursor-pointer rounded-lg w-fit" (click)="CloseModalButton()">CERRAR</div>
+        </div>
+        <form (ngSubmit)="registrarReclamo()" class="bg-gray-500 shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          
+          <!-- Tipo de Documento -->
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="tipoDocumento">
+              Tipo de Documento
+            </label>
+            <select id="tipoDocumento" [(ngModel)]="reclamo.tipoDocumentoId" name="tipoDocumentoId" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+              <option *ngFor="let tipo of tipoDocumentos" [value]="tipo.id">{{ tipo.nombre }}</option>
+            </select>
+          </div>
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="tipoDepartamento">
+              Tipo de Departamento
+            </label>
+            <select id="tipoDepartamento" [(ngModel)]="reclamo.departamentoId" (change)="EscogeDepartamento($event)" name="tipoDepartamento" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+              <option *ngFor="let tipo of departamentos" [value]="tipo.id">{{ tipo.nombre }}</option>
+            </select>
+          </div>
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="tipoProvincia">
+              Tipo de Provincia
+            </label>
+            <select id="tipoProvincia" [(ngModel)]="reclamo.provinciaId" (change)="EscogeProvincia($event)" name="tipoProvincia" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+              <option *ngFor="let tipo of FilterProvincias" [value]="tipo.id">{{ tipo.nombre }}</option>
+            </select>
+          </div>
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="tipoDocumento">
+              Tipo de Distrito
+            </label>
+            <select id="tipoDistrito" [(ngModel)]="reclamo.distritoId" (change)="EscogeDistrito($event)" name="tipoDistrito" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+              <option *ngFor="let tipo of FilterDistritos" [value]="tipo.id">{{ tipo.nombre }}</option>
+            </select>
+          </div>
+
+          <!-- Documento -->
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="documento">
+              Documento (DNI)
+            </label>
+            <input type="text" id="documento" [(ngModel)]="reclamo.documento" name="documento" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required [readonly]="readonlyMode">
+          </div>
+
+          <!-- Nombre Completo -->
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="nombre">
+              Nombre Completo
+            </label>
+            <input type="text" id="nombre" [(ngModel)]="reclamo.nombreCompleto" name="nombreCompleto" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required [readonly]="readonlyMode">
+          </div>
+
+          <!-- Correo Electrónico -->
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="correoElectronico">
+              Correo Electrónico
+            </label>
+            <input type="email" id="correoElectronico" [(ngModel)]="reclamo.correoElectronico" name="correoElectronico" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required [readonly]="readonlyMode">
+          </div>
+
+          <!-- Teléfono -->
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="telefono">
+              Teléfono
+            </label>
+            <input type="text" id="telefono" [(ngModel)]="reclamo.telefono" name="telefono" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required [readonly]="readonlyMode">
+          </div>
+
+          <!-- Celular -->
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="celular">
+              Celular
+            </label>
+            <input type="text" id="celular" [(ngModel)]="reclamo.celular" name="celular" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required [readonly]="readonlyMode">
+          </div>
+
+          <!-- Fecha del Hecho -->
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="fechaHecho">
+              Fecha del Hecho
+            </label>
+            <input type="date" id="fechaHecho" [(ngModel)]="reclamo.fechaHecho" (change)="UpdateDate($event)" name="fechaHecho" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required [readonly]="readonlyMode">
+          </div>
+
+          <!-- Domicilio -->
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="domicilio">
+              Domicilio
+            </label>
+            <input type="text" id="domicilio" [(ngModel)]="reclamo.domicilio" name="domicilio" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required [readonly]="readonlyMode">
+          </div>
+
+          <!-- Funcionario -->
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="funcionario">
+              Funcionario
+            </label>
+            <input type="text" id="funcionario" [(ngModel)]="reclamo.funcionario" name="funcionario" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required [readonly]="readonlyMode">
+          </div>
+
+          <!-- Descripción -->
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="descripcion">
+              Descripción
+            </label>
+            <textarea id="descripcion" [(ngModel)]="reclamo.descripcion" name="descripcion" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" maxlength="1000" required [readonly]="readonlyMode"></textarea>
+          </div>
+
+          <!-- Botón Crear Reclamo -->
+          <button *ngIf="!readonlyMode" type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Crear Reclamo
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista de Reclamos Registrados -->
+  <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-6">
+    <table class="w-full text-sm text-left text-gray-500">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+        <tr>
+          <th scope="col" class="px-6 py-3">DOCUMENTO</th>
+          <th scope="col" class="px-6 py-3">NOMBRE</th>
+          <th scope="col" class="px-6 py-3">FECHA HECHO</th>
+          <th scope="col" class="px-6 py-3">ACCIONES</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let reclamo of reclamos">
+          <td class="px-6 py-4">{{ reclamo.documento }}</td>
+          <td class="px-6 py-4">{{ reclamo.nombreCompleto }}</td>
+          <td class="px-6 py-4">{{ reclamo.fechaHecho.split(" ")[0] }}</td>
+          <td class="px-6 py-4">
+            <button (click)="verReclamo(reclamo.id)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+              Ver
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
