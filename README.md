@@ -1,3 +1,5 @@
+
+
 En la carpeta Angular/app usar el comando "npm install" para instalar los paquetes.
 Si es que el archivo que se subio esta corrupto aqui esta el original para que pueda visualizarlo.
 Se separa en 2 archivos uno el back-end y otro el front-end siendo Angular el front y T3 el back.
